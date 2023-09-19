@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "npx husky install"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -15,5 +16,10 @@
     "git-commit-msg-linter": "^5.0.4",
     "husky": "^8.0.3",
     "lint-staged": "^14.0.1"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "pg": "^8.11.3"
   }
 }
