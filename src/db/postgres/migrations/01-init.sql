@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS users(
     firstName VARCHAR(30) NOT NULL,
     lastName VARCHAR(30) NOT NULL,
     email VARCHAR(80) NOT NULL UNIQUE,
-    password VARCHAR(40) NOT NULL
+    password VARCHAR(100) NOT NULL
 );
 
 DO $$
