@@ -7,11 +7,13 @@ import { PostgresUpdateUserRepository } from "../repositores/postgres/update-use
 export class UpdateUserUseCase {
   async execute(userId, updateUserParams) {
     if (updateUserParams.email) {
-      const emailAlreadyInUse = new PostgresGetUserByEmailRepository(
+      const getUserByEmail = new PostgresGetUserByEmailRepository();
+
+      const emailAlreadyInUse = await getUserByEmail.execute(
         updateUserParams.email,
       );
 
-      if (emailAlreadyInUse) {
+      if (emailAlreadyInUse && emailAlreadyInUse.id !== userId) {
         throw new EmailIsAlreadyInUseError(updateUserParams.email);
       }
     }
@@ -21,7 +23,7 @@ export class UpdateUserUseCase {
     };
 
     if (updateUserParams.password) {
-      const hashedPassword = bcrypt.hash(updateUserParams.password, 10);
+      const hashedPassword = await bcrypt.hash(updateUserParams.password, 10);
 
       data.password = hashedPassword;
     }
