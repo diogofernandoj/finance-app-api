@@ -3,6 +3,7 @@ import express from "express";
 
 import {
   CreateUserController,
+  DeleteUserController,
   GetUserByIdController,
   UpdateUserController,
 } from "./src/controllers/index.js";
@@ -20,17 +21,25 @@ app.post("/api/users", async (request, response) => {
 });
 
 app.get("/api/users/:userId", async (request, response) => {
-  const getUserById = new GetUserByIdController();
+  const getUserByIdController = new GetUserByIdController();
 
-  const { statusCode, body } = await getUserById.execute(request);
+  const { statusCode, body } = await getUserByIdController.execute(request);
 
   response.status(statusCode).json(body);
 });
 
 app.patch("/api/users/:userId", async (request, response) => {
-  const updateUser = new UpdateUserController();
+  const updateUserController = new UpdateUserController();
 
-  const { statusCode, body } = await updateUser.execute(request);
+  const { statusCode, body } = await updateUserController.execute(request);
+
+  response.status(statusCode).json(body);
+});
+
+app.delete("/api/users/:userId", async (request, response) => {
+  const deleteUserController = new DeleteUserController();
+
+  const { statusCode, body } = await deleteUserController.execute(request);
 
   response.status(statusCode).json(body);
 });
