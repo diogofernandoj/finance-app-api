@@ -55,9 +55,12 @@ export class UpdateUserController {
         }
       }
 
-      const updateUser = new UpdateUserUseCase();
+      const updateUserUseCase = new UpdateUserUseCase();
 
-      const updatedUser = await updateUser.execute(userId, updateUserParams);
+      const updatedUser = await updateUserUseCase.execute(
+        userId,
+        updateUserParams,
+      );
 
       return ok(updatedUser);
     } catch (error) {

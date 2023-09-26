@@ -16,9 +16,9 @@ export class GetUserByIdController {
         return invalidIdResponse();
       }
 
-      const getUserById = new GetUserByIdUseCase();
+      const getUserByIdUseCase = new GetUserByIdUseCase();
 
-      const user = await getUserById.execute(httpRequest.params.userId);
+      const user = await getUserByIdUseCase.execute(httpRequest.params.userId);
 
       if (!user) {
         return notFound({ errorMessage: "User not found" });
