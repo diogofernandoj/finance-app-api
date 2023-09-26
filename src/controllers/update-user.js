@@ -1,4 +1,4 @@
-import { UpdateUserUseCase } from "../use-cases/update-user.js";
+import { UpdateUserUseCase } from "../use-cases/index.js";
 import { EmailIsAlreadyInUseError } from "../errors/user.js";
 import {
   checkIfEmailIsValid,
