@@ -1,18 +1,24 @@
-import validator from "validator";
-
-import { badRequest, ok, serverError } from "./helper.js";
+import { badRequest, ok, serverError } from "./helper/http.js";
 import { UpdateUserUseCase } from "../use-cases/update-user.js";
 import { EmailIsAlreadyInUseError } from "../errors/user.js";
+import {
+  checkIfEmailIsValid,
+  checkIfIdIsValid,
+  checkIfPasswordIsValid,
+  invalidEmailResponse,
+  invalidIdResponse,
+  invalidPasswordResponse,
+} from "./helpers/user.js";
 
 export class UpdateUserController {
   async execute(httpRequest) {
     try {
       const userId = httpRequest.params.userId;
 
-      const idIsValid = validator.isUUID(userId);
+      const idIsValid = checkIfIdIsValid(userId);
 
       if (!idIsValid) {
-        return badRequest({ errorMessage: "The provided id is not valid" });
+        return invalidIdResponse();
       }
 
       const updateUserParams = httpRequest.body;
@@ -30,20 +36,20 @@ export class UpdateUserController {
       }
 
       if (updateUserParams.password) {
-        const passwordIsValid = updateUserParams.password.length > 6;
+        const passwordIsValid = checkIfPasswordIsValid(
+          updateUserParams.password,
+        );
 
         if (!passwordIsValid) {
-          return badRequest({
-            errorMessage: "Password must be at least 6 characters",
-          });
+          return invalidPasswordResponse();
         }
       }
 
       if (updateUserParams.email) {
-        const emailIsValid = validator.isEmail(updateUserParams.email);
+        const emailIsValid = checkIfEmailIsValid(updateUserParams.email);
 
         if (!emailIsValid) {
-          return badRequest({ errorMessage: "The provided e-mail is invalid" });
+          return invalidEmailResponse();
         }
       }
 
