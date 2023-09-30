@@ -10,7 +10,7 @@ import {
   PostgresGetUserByEmailRepository,
   PostgresGetUserByIdRepository,
   PostgresUpdateUserRepository,
-} from "../../repositores/postgres/index.js";
+} from "../../repositories/postgres/index.js";
 import {
   CreateUserUseCase,
   DeleteUserUseCase,

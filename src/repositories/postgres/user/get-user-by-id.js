@@ -1,4 +1,4 @@
-import { PostgresClient } from "../../db/postgres/client.js";
+import { PostgresClient } from "../../../db/postgres/client.js";
 
 export class PostgresGetUserByIdRepository {
   async execute(userId) {
