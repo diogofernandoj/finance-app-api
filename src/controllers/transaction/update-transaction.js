@@ -7,6 +7,7 @@ import {
   invalidAmountResponse,
   checkIfTypeIsValid,
   invalidTypeResponse,
+  ok,
 } from "../helpers/index.js";
 
 export class UpdateTransactionController {
@@ -61,7 +62,7 @@ export class UpdateTransactionController {
         updateTransactionParams,
       );
 
-      return transaction;
+      return ok(transaction);
     } catch (error) {
       console.error(error);
 
