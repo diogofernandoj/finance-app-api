@@ -6,6 +6,7 @@ import {
   checkIfIdIsValid,
   invalidIdResponse,
   created,
+  validateRequiredFields,
 } from "../helpers/index.js";
 
 export class CreateTransactionController {
@@ -16,15 +17,17 @@ export class CreateTransactionController {
     try {
       const createTransactionParams = httpRequest.body;
 
-      const requiredFiels = ["user_id", "title", "date", "amount", "type"];
+      const requiredFields = ["user_id", "title", "date", "amount", "type"];
 
-      for (const field of requiredFiels) {
-        if (
-          !createTransactionParams[field] ||
-          createTransactionParams[field].toString().trim().length === 0
-        ) {
-          return badRequest({ errorMessage: `Missing param: ${field}` });
-        }
+      const { missingField } = validateRequiredFields(
+        createTransactionParams,
+        requiredFields,
+      );
+
+      if (missingField) {
+        return badRequest({
+          errorMessage: `The field ${missingField} is required`,
+        });
       }
 
       const idIsValid = checkIfIdIsValid(createTransactionParams.user_id);
