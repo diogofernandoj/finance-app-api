@@ -13,14 +13,17 @@ export class PostgresUpdateTransactionRepository {
     updateValues.push(transactionId);
 
     const updateQuery = `
-        UPDATE transactions
-        SET ${updateFields.join(", ")}
-        WHERE id = $${updateValues.length}
-        RETURNING *
+            UPDATE transactions
+            SET ${updateFields.join(", ")} 
+            WHERE id = $${updateValues.length}
+            RETURNING *
         `;
 
-    const transaction = await PostgresClient.query(updateQuery, updateValues);
+    const updatedTransaction = await PostgresClient.query(
+      updateQuery,
+      updateValues,
+    );
 
-    return transaction;
+    return updatedTransaction[0];
   }
 }
