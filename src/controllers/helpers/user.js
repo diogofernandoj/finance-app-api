@@ -8,14 +8,9 @@ export const invalidPasswordResponse = () =>
 export const invalidEmailResponse = () =>
   badRequest({ errorMessage: "The provided e-mail is not valid" });
 
-export const invalidIdResponse = () =>
-  badRequest({ errorMessage: "The provided id is not valid" });
-
 export const userNotFoundResponse = () =>
   notFound({ errorMessage: "User not found" });
 
 export const checkIfPasswordIsValid = (password) => password.length >= 6;
 
 export const checkIfEmailIsValid = (email) => validator.isEmail(email);
-
-export const checkIfIdIsValid = (id) => validator.isUUID(id);
