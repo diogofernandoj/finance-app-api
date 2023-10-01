@@ -21,7 +21,7 @@ export class CreateTransactionController {
       for (const field of requiredFiels) {
         if (
           !createTransactionParams[field] ||
-          createTransactionParams[field].trim().length === 0
+          createTransactionParams[field].toString().trim().length === 0
         ) {
           return badRequest({ errorMessage: `Missing param: ${field}` });
         }
