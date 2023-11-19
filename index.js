@@ -4,6 +4,7 @@ import express from "express";
 import {
   makeCreateUserController,
   makeDeleteUserController,
+  makeGetUserBalanceController,
   makeGetUserByIdController,
   makeUpdateUserController,
 } from "./src/factories/controllers/user.js";
@@ -25,7 +26,7 @@ app.post("/api/users", async (request, response) => {
 
   const { statusCode, body } = await createUserController.execute(request);
 
-  response.status(statusCode).json(body);
+  response.status(statusCode).send(body);
 });
 
 app.get("/api/users/:userId", async (request, response) => {
@@ -33,7 +34,15 @@ app.get("/api/users/:userId", async (request, response) => {
 
   const { statusCode, body } = await getUserByIdController.execute(request);
 
-  response.status(statusCode).json(body);
+  response.status(statusCode).send(body);
+});
+
+app.get("/api/users/:userId/balance", async (request, response) => {
+  const getUserBalance = makeGetUserBalanceController();
+
+  const { statusCode, body } = await getUserBalance.execute(request);
+
+  response.status(statusCode).send(body);
 });
 
 app.patch("/api/users/:userId", async (request, response) => {
@@ -41,7 +50,7 @@ app.patch("/api/users/:userId", async (request, response) => {
 
   const { statusCode, body } = await updateUserController.execute(request);
 
-  response.status(statusCode).json(body);
+  response.status(statusCode).send(body);
 });
 
 app.delete("/api/users/:userId", async (request, response) => {
@@ -49,7 +58,7 @@ app.delete("/api/users/:userId", async (request, response) => {
 
   const { statusCode, body } = await deleteUserController.execute(request);
 
-  response.status(statusCode).json(body);
+  response.status(statusCode).send(body);
 });
 
 // TRANSACTION ROUTES
@@ -59,7 +68,7 @@ app.post("/api/transactions", async (request, response) => {
   const { statusCode, body } =
     await createTransactionController.execute(request);
 
-  response.status(statusCode).json(body);
+  response.status(statusCode).send(body);
 });
 
 app.get("/api/transactions", async (request, response) => {
@@ -69,7 +78,7 @@ app.get("/api/transactions", async (request, response) => {
   const { statusCode, body } =
     await getTransactionsByUserIdController.execute(request);
 
-  response.status(statusCode).json(body);
+  response.status(statusCode).send(body);
 });
 
 app.patch("/api/transactions/:transactionId", async (request, response) => {
@@ -78,7 +87,7 @@ app.patch("/api/transactions/:transactionId", async (request, response) => {
   const { statusCode, body } =
     await updateTransactionController.execute(request);
 
-  response.status(statusCode).json(body);
+  response.status(statusCode).send(body);
 });
 
 app.delete("/api/transactions/:transactionId", async (request, response) => {
@@ -87,7 +96,7 @@ app.delete("/api/transactions/:transactionId", async (request, response) => {
   const { statusCode, body } =
     await deleteTransactionController.execute(request);
 
-  response.status(statusCode).json(body);
+  response.status(statusCode).send(body);
 });
 
 app.listen(process.env.PORT, () =>
