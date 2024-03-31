@@ -1,17 +1,6 @@
-import {
-  serverError,
-  checkIfIdIsValid,
-  invalidIdResponse,
-  created,
-  validateRequiredFields,
-  requiredFieldIsMissingResponse,
-} from "../helpers/index.js";
-import {
-  checkIfAmountIsValid,
-  checkIfTypeIsValid,
-  invalidAmountResponse,
-  invalidTypeResponse,
-} from "../helpers/transaction.js";
+import { ZodError } from "zod";
+import { createTransactionSchema } from "../../schemas/index.js";
+import { serverError, created, badRequest } from "../helpers/index.js";
 
 export class CreateTransactionController {
   constructor(createTransactionUseCase) {
@@ -21,46 +10,17 @@ export class CreateTransactionController {
     try {
       const createTransactionParams = httpRequest.body;
 
-      const requiredFields = ["user_id", "title", "date", "amount", "type"];
+      await createTransactionSchema.parseAsync(createTransactionParams);
 
-      const { missingField } = validateRequiredFields(
+      const transaction = await this.createTransactionUseCase.execute(
         createTransactionParams,
-        requiredFields,
       );
-
-      if (missingField) {
-        return requiredFieldIsMissingResponse(missingField);
-      }
-
-      const idIsValid = checkIfIdIsValid(createTransactionParams.user_id);
-
-      if (!idIsValid) {
-        invalidIdResponse();
-      }
-
-      const amountIsValid = checkIfAmountIsValid(
-        createTransactionParams.amount,
-      );
-
-      if (!amountIsValid) {
-        return invalidAmountResponse();
-      }
-
-      const type = createTransactionParams.type.trim().toUpperCase();
-
-      const typeIsValid = checkIfTypeIsValid(type);
-
-      if (!typeIsValid) {
-        return invalidTypeResponse();
-      }
-
-      const transaction = await this.createTransactionUseCase.execute({
-        ...createTransactionParams,
-        type,
-      });
 
       return created(transaction);
     } catch (error) {
+      if (error instanceof ZodError) {
+        return badRequest({ message: error.errors[0].message });
+      }
       console.error(error);
       return serverError();
     }
