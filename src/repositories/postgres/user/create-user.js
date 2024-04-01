@@ -1,23 +1,15 @@
-import { PostgresClient } from "../../../db/postgres/client.js";
+import { prisma } from "../../../../prisma/prisma.js";
 
 export class PostgresCreateUserRepository {
   async execute(createUserParams) {
-    await PostgresClient.query(
-      "INSERT INTO users (id, firstName, lastName, email, password) VALUES ($1, $2, $3, $4, $5)",
-      [
-        createUserParams.id,
-        createUserParams.firstName,
-        createUserParams.lastName,
-        createUserParams.email,
-        createUserParams.password,
-      ],
-    );
-
-    const createdUser = await PostgresClient.query(
-      "SELECT * FROM users WHERE id = $1",
-      [createUserParams.id],
-    );
-
-    return createdUser[0];
+    return await prisma.user.create({
+      data: {
+        id: createUserParams.id,
+        firstName: createUserParams.firstName,
+        lastName: createUserParams.lastName,
+        email: createUserParams.email,
+        password: createUserParams.password,
+      },
+    });
   }
 }
