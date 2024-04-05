@@ -1,25 +1,53 @@
-import { PostgresClient } from "../../../db/postgres/client.js";
+import { prisma } from "../../../../prisma/prisma.js";
 
 export class PostgresGetUserBalanceRepository {
   async execute(userId) {
-    const balance = await PostgresClient.query(
-      `SELECT
-                SUM(CASE WHEN type = 'EARNING' THEN amount ELSE 0 END) AS earnings,
-                SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END) AS expenses,
-                SUM(CASE WHEN type = 'INVESTMENT' THEN amount ELSE 0 END) AS investments,
-                (
-                    SUM(CASE WHEN type = 'EARNING' THEN amount ELSE 0 END)
-                    - SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END)
-                    - SUM(CASE WHEN type = 'INVESTMENT' THEN amount ELSE 0 END)
-                ) AS balance
-            FROM transactions
-            WHERE user_id = $1;`,
-      [userId],
-    );
+    const {
+      _sum: { amount: totalEarnings },
+    } = await prisma.transaction.aggregate({
+      where: {
+        user_id: userId,
+        type: "EARNING",
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+
+    const {
+      _sum: { amount: totalExpenses },
+    } = await prisma.transaction.aggregate({
+      where: {
+        user_id: userId,
+        type: "EXPENSE",
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+
+    const {
+      _sum: { amount: totalInvestments },
+    } = await prisma.transaction.aggregate({
+      where: {
+        user_id: userId,
+        type: "INVESTMENT",
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+
+    const earnings = totalEarnings || 0;
+    const expenses = totalExpenses || 0;
+    const investments = totalInvestments || 0;
+    const balance = earnings - expenses - investments;
 
     return {
-      userId,
-      ...balance[0],
+      earnings,
+      expenses,
+      investments,
+      balance,
     };
   }
 }
