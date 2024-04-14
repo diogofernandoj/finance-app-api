@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { CreateUserController } from "../index.js";
+import { EmailIsAlreadyInUseError } from "../../errors/user.js";
 
 describe("Create User Controller", () => {
   class CreateUserUseCaseStub {
@@ -198,5 +199,31 @@ describe("Create User Controller", () => {
 
     // assert
     expect(res.statusCode).toBe(500);
+  });
+
+  it("should return 500 if CreateUserUseCase throws EmailAlreadyInUseError", async () => {
+    // arrange
+    const createUserUseCase = new CreateUserUseCaseStub();
+    const createUserController = new CreateUserController(createUserUseCase);
+
+    const httpRequest = {
+      body: {
+        firstName: faker.person.firstName(),
+        lastName: faker.person.lastName(),
+        email: faker.internet.email(),
+        password: faker.internet.password({ length: 7 }),
+      },
+    };
+    jest
+      .spyOn(createUserUseCase, "execute")
+      .mockRejectedValueOnce(
+        new EmailIsAlreadyInUseError(httpRequest.body.email),
+      );
+
+    // act
+    const result = await createUserController.execute(httpRequest);
+
+    // assert
+    expect(result.statusCode).toBe(400);
   });
 });
