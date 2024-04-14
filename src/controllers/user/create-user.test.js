@@ -129,4 +129,25 @@ describe("Create User Controller", () => {
     // assert
     expect(res.statusCode).toBe(400);
   });
+
+  it("should return 400 if password is less than 6 characters", async () => {
+    // arrange
+    const createUserUseCase = new CreateUserUseCaseStub();
+    const createUserController = new CreateUserController(createUserUseCase);
+
+    const httpRequest = {
+      body: {
+        firstName: "Diogo",
+        lastName: "Jorge",
+        email: "diogo@email.com",
+        password: "12345",
+      },
+    };
+
+    // act
+    const res = await createUserController.execute(httpRequest);
+
+    // assert
+    expect(res.statusCode).toBe(400);
+  });
 });
