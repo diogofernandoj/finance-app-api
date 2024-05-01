@@ -7,6 +7,7 @@
 const config = {
   coverageDirectory: "coverage",
   coverageProvider: "v8",
+  modulePathIgnorePatterns: [".postgres-data"],
 };
 
 export default config;
