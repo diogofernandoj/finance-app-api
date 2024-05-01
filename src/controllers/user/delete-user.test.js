@@ -48,4 +48,16 @@ describe("Delete User Controller", () => {
     // assert
     expect(res.statusCode).toBe(400);
   });
+
+  it("should return 404 if user is not found", async () => {
+    // arrange
+    const { sut, deleteUserUseCase } = makeSut();
+    jest.spyOn(deleteUserUseCase, "execute").mockReturnValueOnce(null);
+
+    // act
+    const res = await sut.execute(httpRequest);
+
+    // assert
+    expect(res.statusCode).toBe(404);
+  });
 });
