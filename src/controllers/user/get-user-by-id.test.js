@@ -61,4 +61,18 @@ describe("GetUserByIdController", () => {
     // assert
     expect(res.statusCode).toBe(404);
   });
+
+  it("should return 500 if GetUserByIdUseCase throws", async () => {
+    // arrange
+    const { sut, GetUserByIdUseCase } = makeSut();
+    jest
+      .spyOn(GetUserByIdUseCase, "execute")
+      .mockRejectedValueOnce(new Error());
+
+    // act
+    const res = await sut.execute(httpRequest);
+
+    // assert
+    expect(res.statusCode).toBe(500);
+  });
 });
