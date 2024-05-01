@@ -37,4 +37,15 @@ describe("Delete User Controller", () => {
     // assert
     expect(res.statusCode).toBe(200);
   });
+
+  it("should return 400 when user id is not valid", async () => {
+    // arrange
+    const { sut } = makeSut();
+
+    // act
+    const res = await sut.execute({ params: { userId: "invalid_id" } });
+
+    // assert
+    expect(res.statusCode).toBe(400);
+  });
 });
