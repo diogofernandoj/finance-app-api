@@ -114,4 +114,16 @@ describe("UpdateUserController", () => {
     // assert
     expect(res.statusCode).toBe(404);
   });
+
+  it("should return 500 if UpdateUserUseCase throws an error", async () => {
+    // arrange
+    const { sut, UpdateUserUseCase } = makeSut();
+    jest.spyOn(UpdateUserUseCase, "execute").mockRejectedValueOnce(new Error());
+
+    // act
+    const res = await sut.execute(httpRequest);
+
+    // assert
+    expect(res.statusCode).toBe(500);
+  });
 });
