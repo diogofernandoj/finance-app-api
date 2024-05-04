@@ -81,4 +81,18 @@ describe("GetTransactionsByUserId", () => {
     // assert
     expect(res.statusCode).toBe(404);
   });
+
+  it("should return 500 when GetTransactionsUseCase throws", async () => {
+    // arrange
+    const { sut, getTransactionsByUserIdUseCase } = makeSut();
+    jest
+      .spyOn(getTransactionsByUserIdUseCase, "execute")
+      .mockRejectedValueOnce(new Error());
+
+    // act
+    const res = await sut.execute(httpRequest);
+
+    // assert
+    expect(res.statusCode).toBe(500);
+  });
 });
