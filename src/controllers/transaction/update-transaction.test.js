@@ -98,4 +98,16 @@ describe("UpdateTransactionController", () => {
     // assert
     expect(res.statusCode).toBe(400);
   });
+
+  it("should return 404 when transaction is not found", async () => {
+    // arrange
+    const { sut, updateTransactionUseCase } = makeSut();
+    jest.spyOn(updateTransactionUseCase, "execute").mockResolvedValueOnce(null);
+
+    // act
+    const res = await sut.execute(httpRequest);
+
+    // assert
+    expect(res.statusCode).toBe(404);
+  });
 });
