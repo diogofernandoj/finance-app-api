@@ -76,4 +76,16 @@ describe("DeleteTransactionController", () => {
     // assert
     expect(res.statusCode).toBe(500);
   });
+
+  it("should call DeleteTransactionUseCase with correct params", async () => {
+    // arrange
+    const { sut, deleteTransactionUseCase } = makeSut();
+    const executeSpy = jest.spyOn(deleteTransactionUseCase, "execute");
+
+    // act
+    await sut.execute(httpRequest);
+
+    // assert
+    expect(executeSpy).toHaveBeenCalledWith(httpRequest.params.transactionId);
+  });
 });
