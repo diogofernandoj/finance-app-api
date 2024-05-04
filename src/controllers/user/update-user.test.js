@@ -10,10 +10,10 @@ describe("UpdateUserController", () => {
   }
 
   const makeSut = () => {
-    const UpdateUserUseCase = new UpdateUserUseCaseStub();
-    const sut = new UpdateUserController(UpdateUserUseCase);
+    const updateUserUseCase = new UpdateUserUseCaseStub();
+    const sut = new UpdateUserController(updateUserUseCase);
 
-    return { sut, UpdateUserUseCase };
+    return { sut, updateUserUseCase };
   };
 
   const httpRequest = {
@@ -106,8 +106,8 @@ describe("UpdateUserController", () => {
 
   it("should return 404 if no user is found", async () => {
     // arrange
-    const { sut, UpdateUserUseCase } = makeSut();
-    jest.spyOn(UpdateUserUseCase, "execute").mockResolvedValueOnce(null);
+    const { sut, updateUserUseCase } = makeSut();
+    jest.spyOn(updateUserUseCase, "execute").mockResolvedValueOnce(null);
 
     // act
     const res = await sut.execute(httpRequest);
@@ -118,8 +118,8 @@ describe("UpdateUserController", () => {
 
   it("should return 500 if UpdateUserUseCase throws an error", async () => {
     // arrange
-    const { sut, UpdateUserUseCase } = makeSut();
-    jest.spyOn(UpdateUserUseCase, "execute").mockRejectedValueOnce(new Error());
+    const { sut, updateUserUseCase } = makeSut();
+    jest.spyOn(updateUserUseCase, "execute").mockRejectedValueOnce(new Error());
 
     // act
     const res = await sut.execute(httpRequest);
@@ -130,9 +130,9 @@ describe("UpdateUserController", () => {
 
   it("should return 500 if UpdateUserUseCase throws EmailAlreadyInUse error", async () => {
     // arrange
-    const { sut, UpdateUserUseCase } = makeSut();
+    const { sut, updateUserUseCase } = makeSut();
     jest
-      .spyOn(UpdateUserUseCase, "execute")
+      .spyOn(updateUserUseCase, "execute")
       .mockRejectedValueOnce(new EmailIsAlreadyInUseError());
 
     // act
@@ -140,5 +140,20 @@ describe("UpdateUserController", () => {
 
     // assert
     expect(res.statusCode).toBe(400);
+  });
+
+  it("should call UpdateUserUseCase with correct params", async () => {
+    // arrange
+    const { sut, updateUserUseCase } = makeSut();
+    const executeSpy = jest.spyOn(updateUserUseCase, "execute");
+
+    // act
+    await sut.execute(httpRequest);
+
+    // assert
+    expect(executeSpy).toHaveBeenCalledWith(
+      httpRequest.params.userId,
+      httpRequest.body,
+    );
   });
 });
