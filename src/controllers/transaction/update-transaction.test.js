@@ -30,7 +30,7 @@ describe("UpdateTransactionController", () => {
     body: {
       title: faker.string.alpha(10),
       date: faker.date.anytime().toISOString(),
-      amount: faker.number.float(),
+      amount: faker.number.float({ min: 1 }),
       type: faker.helpers.enumValue(TransactionType),
     },
   };
