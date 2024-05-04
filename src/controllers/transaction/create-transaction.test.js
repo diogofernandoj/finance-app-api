@@ -42,7 +42,9 @@ describe("CreateTransactionController", () => {
     const { sut } = makeSut();
 
     // act
-    const res = await sut.execute({ ...httpRequest.body, user_id: null });
+    const res = await sut.execute({
+      body: { ...httpRequest.body, user_id: null },
+    });
 
     // assert
     expect(res.statusCode).toBe(400);
@@ -53,7 +55,9 @@ describe("CreateTransactionController", () => {
     const { sut } = makeSut();
 
     // act
-    const res = await sut.execute({ ...httpRequest.body, title: null });
+    const res = await sut.execute({
+      body: { ...httpRequest.body, title: null },
+    });
 
     // assert
     expect(res.statusCode).toBe(400);
@@ -64,7 +68,9 @@ describe("CreateTransactionController", () => {
     const { sut } = makeSut();
 
     // act
-    const res = await sut.execute({ ...httpRequest.body, date: null });
+    const res = await sut.execute({
+      body: { ...httpRequest.body, date: null },
+    });
 
     // assert
     expect(res.statusCode).toBe(400);
@@ -75,7 +81,9 @@ describe("CreateTransactionController", () => {
     const { sut } = makeSut();
 
     // act
-    const res = await sut.execute({ ...httpRequest.body, amount: null });
+    const res = await sut.execute({
+      body: { ...httpRequest.body, amount: null },
+    });
 
     // assert
     expect(res.statusCode).toBe(400);
@@ -86,7 +94,9 @@ describe("CreateTransactionController", () => {
     const { sut } = makeSut();
 
     // act
-    const res = await sut.execute({ ...httpRequest.body, type: null });
+    const res = await sut.execute({
+      body: { ...httpRequest.body, type: null },
+    });
 
     // assert
     expect(res.statusCode).toBe(400);
@@ -98,8 +108,7 @@ describe("CreateTransactionController", () => {
 
     // act
     const res = await sut.execute({
-      ...httpRequest.body,
-      date: "invalid_date",
+      body: { ...httpRequest.body, date: "invalid_date" },
     });
 
     // assert
@@ -112,8 +121,20 @@ describe("CreateTransactionController", () => {
 
     // act
     const res = await sut.execute({
-      ...httpRequest.body,
-      type: "invalid_type",
+      body: { ...httpRequest.body, type: "invalid_type" },
+    });
+
+    // assert
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("should return 400 when amount is not a valid currency", async () => {
+    // arrange
+    const { sut } = makeSut();
+
+    // act
+    const res = await sut.execute({
+      body: { ...httpRequest.body, amount: "invalid_amount" },
     });
 
     // assert
