@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { GetTransactionsByUserIdController } from "../index.js";
 import { TransactionType } from "@prisma/client";
+import { UserNotFoundError } from "../../errors/user.js";
 
 describe("GetTransactionsByUserId", () => {
   class GetTransactionsByUserIdUseCaseStub {
@@ -65,5 +66,19 @@ describe("GetTransactionsByUserId", () => {
 
     // assert
     expect(res.statusCode).toBe(400);
+  });
+
+  it("should return 404 when GetTransactionsUseCase throws UserNotFoundError", async () => {
+    // arrange
+    const { sut, getTransactionsByUserIdUseCase } = makeSut();
+    jest
+      .spyOn(getTransactionsByUserIdUseCase, "execute")
+      .mockRejectedValueOnce(new UserNotFoundError());
+
+    // act
+    const res = await sut.execute(httpRequest);
+
+    // assert
+    expect(res.statusCode).toBe(404);
   });
 });
