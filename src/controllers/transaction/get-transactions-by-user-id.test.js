@@ -55,4 +55,15 @@ describe("GetTransactionsByUserId", () => {
     // assert
     expect(res.statusCode).toBe(400);
   });
+
+  it("should return 400 when user id is invalid", async () => {
+    // arrange
+    const { sut } = makeSut();
+
+    // act
+    const res = await sut.execute({ query: { userId: "invalid_id" } });
+
+    // assert
+    expect(res.statusCode).toBe(400);
+  });
 });
