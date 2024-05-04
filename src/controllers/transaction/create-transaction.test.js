@@ -80,4 +80,15 @@ describe("CreateTransactionController", () => {
     // assert
     expect(res.statusCode).toBe(400);
   });
+
+  it("should return 400 when type is missing", async () => {
+    // arrange
+    const { sut } = makeSut();
+
+    // act
+    const res = await sut.execute({ ...httpRequest.body, type: null });
+
+    // assert
+    expect(res.statusCode).toBe(400);
+  });
 });
