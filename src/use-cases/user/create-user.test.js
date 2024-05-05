@@ -128,4 +128,18 @@ describe("CreateUserUseCase", () => {
     // assert
     await expect(user).rejects.toThrow();
   });
+
+  it("should throw if IdGeneratorAdapter throws", async () => {
+    // arrange
+    const { sut, idGeneratorAdapter } = makeSut();
+    jest.spyOn(idGeneratorAdapter, "execute").mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    // act
+    const user = sut.execute(params);
+
+    // assert
+    await expect(user).rejects.toThrow();
+  });
 });
