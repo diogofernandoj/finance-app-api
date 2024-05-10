@@ -116,4 +116,18 @@ describe("UpdateUserUseCase", () => {
       password: "hashed_password",
     });
   });
+
+  it("should throw if GetUserByEmailRepository throws", async () => {
+    // arrange
+    const { sut, getUserByEmail } = makeSut();
+    jest.spyOn(getUserByEmail, "execute").mockRejectedValueOnce(new Error());
+
+    // act
+    const res = sut.execute(faker.string.uuid(), {
+      email: faker.string.uuid(),
+    });
+
+    // assert
+    await expect(res).rejects.toThrow();
+  });
 });
