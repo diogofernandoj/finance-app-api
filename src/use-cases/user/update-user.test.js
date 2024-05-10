@@ -4,7 +4,6 @@ import { EmailIsAlreadyInUseError } from "../../errors/user.js";
 
 describe("UpdateUserUseCase", () => {
   const user = {
-    id: faker.string.uuid(),
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
     email: faker.internet.email(),
@@ -24,8 +23,8 @@ describe("UpdateUserUseCase", () => {
   }
 
   class PasswordHasherAdapter {
-    async execute(password) {
-      return password;
+    async execute() {
+      return "hashed_password";
     }
   }
 
@@ -100,5 +99,21 @@ describe("UpdateUserUseCase", () => {
 
     // assert
     await expect(res).rejects.toThrow(new EmailIsAlreadyInUseError(user.email));
+  });
+
+  it("should call UpdateUserRepository with correct params", async () => {
+    // arrange
+    const { sut, updateUserRepository } = makeSut();
+    const executeSpy = jest.spyOn(updateUserRepository, "execute");
+    const userId = faker.string.uuid();
+
+    // act
+    await sut.execute(userId, user);
+
+    // assert
+    expect(executeSpy).toHaveBeenCalledWith(userId, {
+      ...user,
+      password: "hashed_password",
+    });
   });
 });
