@@ -124,7 +124,23 @@ describe("UpdateUserUseCase", () => {
 
     // act
     const res = sut.execute(faker.string.uuid(), {
-      email: faker.string.uuid(),
+      email: faker.internet.email(),
+    });
+
+    // assert
+    await expect(res).rejects.toThrow();
+  });
+
+  it("should throw if PasswordHasherAdapter throws", async () => {
+    // arrange
+    const { sut, passwordHasherAdapter } = makeSut();
+    jest
+      .spyOn(passwordHasherAdapter, "execute")
+      .mockRejectedValueOnce(new Error());
+
+    // act
+    const res = sut.execute(faker.string.uuid(), {
+      password: faker.internet.password({ length: 7 }),
     });
 
     // assert
