@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { CreateTransactionUseCase } from "../index.js";
 import { TransactionType } from "@prisma/client";
+import { UserNotFoundError } from "../../errors/user.js";
 
 describe("CreateTransactionUseCase", () => {
   const params = {
@@ -92,5 +93,17 @@ describe("CreateTransactionUseCase", () => {
 
     // assert
     expect(executeSpy).toHaveBeenCalledWith({ ...params, id: "generated_id" });
+  });
+
+  it("should throw UserNotFoundError if no user is found", async () => {
+    // arrange
+    const { sut, getUserById } = makeSut();
+    jest.spyOn(getUserById, "execute").mockResolvedValueOnce(null);
+
+    // act
+    const res = sut.execute(params);
+
+    // assert
+    await expect(res).rejects.toThrow(new UserNotFoundError(params.user_id));
   });
 });
