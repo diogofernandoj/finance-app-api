@@ -81,4 +81,16 @@ describe("CreateTransactionUseCase", () => {
     // assert
     expect(executeSpy).toHaveBeenCalled();
   });
+
+  it("should call CreateTransactionRepository with correct params", async () => {
+    // arrange
+    const { sut, createTransactionRepository } = makeSut();
+    const executeSpy = jest.spyOn(createTransactionRepository, "execute");
+
+    // act
+    await sut.execute(params);
+
+    // assert
+    expect(executeSpy).toHaveBeenCalledWith({ ...params, id: "generated_id" });
+  });
 });
