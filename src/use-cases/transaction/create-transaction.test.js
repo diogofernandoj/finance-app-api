@@ -118,4 +118,18 @@ describe("CreateTransactionUseCase", () => {
     // assert
     await expect(res).rejects.toThrow();
   });
+
+  it("should throw if IdGeneratorAdapter throws", async () => {
+    // arrange
+    const { sut, idGeneratorAdapter } = makeSut();
+    jest
+      .spyOn(idGeneratorAdapter, "execute")
+      .mockRejectedValueOnce(new Error());
+
+    // act
+    const res = sut.execute(params);
+
+    // assert
+    await expect(res).rejects.toThrow();
+  });
 });
