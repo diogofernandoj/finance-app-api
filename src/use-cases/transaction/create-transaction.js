@@ -16,7 +16,7 @@ export class CreateTransactionUseCase {
       throw new UserNotFoundError(userId);
     }
 
-    const transactionId = this.idGeneratorAdapter.execute();
+    const transactionId = await this.idGeneratorAdapter.execute();
 
     const transaction = await this.createTransactionRepository.execute({
       ...createTransactionParams,
