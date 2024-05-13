@@ -57,10 +57,23 @@ describe("GetTransactionsByUserId", () => {
     await expect(res).rejects.toThrow(new UserNotFoundError(userId));
   });
 
-  it("should call GetUserByIdRepository with correct params", async () => {
+  it("should call GetTransactionsByUserId with correct params", async () => {
     // arrange
     const { sut, getTransactionsByUserIdRepository } = makeSut();
     const executeSpy = jest.spyOn(getTransactionsByUserIdRepository, "execute");
+    const userId = faker.string.uuid();
+
+    // act
+    await sut.execute(userId);
+
+    // assert
+    expect(executeSpy).toHaveBeenCalledWith(userId);
+  });
+
+  it("should call GetUserByIdRepository with correct params", async () => {
+    // arrange
+    const { sut, getUserByIdRepository } = makeSut();
+    const executeSpy = jest.spyOn(getUserByIdRepository, "execute");
     const userId = faker.string.uuid();
 
     // act
