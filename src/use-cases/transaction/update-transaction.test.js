@@ -59,4 +59,18 @@ describe("UpdateTransactionUseCase", () => {
       title: transaction.title,
     });
   });
+
+  it("should throw if UpdateTransactionRepository throws", async () => {
+    // arrange
+    const { sut, updateTransactionRepository } = makeSut();
+    jest
+      .spyOn(updateTransactionRepository, "execute")
+      .mockRejectedValueOnce(new Error());
+
+    // act
+    const res = sut.execute(transaction.id, { type: transaction.type });
+
+    // assert
+    await expect(res).rejects.toThrow();
+  });
 });
