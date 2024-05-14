@@ -4,7 +4,7 @@ import { transaction, user } from "../../tests/index.js";
 
 describe("CreateTransactionUseCase", () => {
   class CreateTransactionRepositoryStub {
-    async execute(transaction) {
+    async execute() {
       return transaction;
     }
   }
@@ -47,7 +47,7 @@ describe("CreateTransactionUseCase", () => {
     const res = await sut.execute(transaction);
 
     // assert
-    expect(res).toEqual({ ...transaction, id: "generated_id" });
+    expect(res).toEqual(transaction);
   });
 
   it("should call GetUserByIdRepository with correct param", async () => {
