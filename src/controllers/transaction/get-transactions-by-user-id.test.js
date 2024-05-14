@@ -1,21 +1,12 @@
 import { faker } from "@faker-js/faker";
 import { GetTransactionsByUserIdController } from "../index.js";
-import { TransactionType } from "@prisma/client";
 import { UserNotFoundError } from "../../errors/user.js";
+import { transaction } from "../../tests/index.js";
 
 describe("GetTransactionsByUserId", () => {
   class GetTransactionsByUserIdUseCaseStub {
     async execute() {
-      return [
-        {
-          id: faker.string.uuid(),
-          user_id: faker.string.uuid(),
-          title: faker.string.alpha(10),
-          date: faker.date.anytime().toISOString(),
-          amount: faker.number.float(),
-          type: faker.helpers.enumValue(TransactionType),
-        },
-      ];
+      return [transaction];
     }
   }
 
