@@ -7,5 +7,5 @@ export const transaction = {
   title: faker.string.alpha(10),
   date: faker.date.anytime().toISOString(),
   type: faker.helpers.enumValue(TransactionType),
-  amount: faker.number.float(),
+  amount: faker.number.float({ min: 1 }),
 };
