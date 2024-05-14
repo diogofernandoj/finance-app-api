@@ -1,19 +1,11 @@
 import { faker } from "@faker-js/faker";
 import { DeleteTransactionUseCase } from "../index.js";
-import { TransactionType } from "@prisma/client";
+import { transaction } from "../../tests/index.js";
 
 describe("DeleteTransactionUseCase", () => {
-  const transaction = {
-    id: faker.string.uuid(),
-    user_id: faker.string.uuid(),
-    title: faker.string.alpha(10),
-    date: faker.date.anytime().toISOString(),
-    type: faker.helpers.enumValue(TransactionType),
-    amount: faker.number.float(),
-  };
   class DeleteTransactionRepositoryStub {
-    async execute(transactionId) {
-      return { ...transaction, id: transactionId };
+    async execute() {
+      return transaction;
     }
   }
 
@@ -33,7 +25,7 @@ describe("DeleteTransactionUseCase", () => {
     const res = await sut.execute(transactionId);
 
     // assert
-    expect(res).toEqual({ ...transaction, id: transactionId });
+    expect(res).toEqual(transaction);
   });
 
   it("should call DeleteTransactionRepository with correct params", async () => {

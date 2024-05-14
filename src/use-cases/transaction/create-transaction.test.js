@@ -1,17 +1,8 @@
-import { faker } from "@faker-js/faker";
 import { CreateTransactionUseCase } from "../index.js";
-import { TransactionType } from "@prisma/client";
 import { UserNotFoundError } from "../../errors/user.js";
+import { transaction, user } from "../../tests/index.js";
 
 describe("CreateTransactionUseCase", () => {
-  const params = {
-    user_id: faker.string.uuid(),
-    title: faker.string.alpha(10),
-    date: faker.date.anytime().toISOString(),
-    type: faker.helpers.enumValue(TransactionType),
-    amount: faker.number.float(),
-  };
-
   class CreateTransactionRepositoryStub {
     async execute(transaction) {
       return transaction;
@@ -20,7 +11,7 @@ describe("CreateTransactionUseCase", () => {
 
   class GetUserByIdRepositoryStub {
     async execute(userId) {
-      return userId;
+      return { ...user, id: userId };
     }
   }
 
@@ -53,10 +44,10 @@ describe("CreateTransactionUseCase", () => {
     const { sut } = makeSut();
 
     // act
-    const res = await sut.execute(params);
+    const res = await sut.execute(transaction);
 
     // assert
-    expect(res).toEqual({ ...params, id: "generated_id" });
+    expect(res).toEqual({ ...transaction, id: "generated_id" });
   });
 
   it("should call GetUserByIdRepository with correct param", async () => {
@@ -65,10 +56,10 @@ describe("CreateTransactionUseCase", () => {
     const executeSpy = jest.spyOn(getUserById, "execute");
 
     // act
-    await sut.execute(params);
+    await sut.execute(transaction);
 
     // assert
-    expect(executeSpy).toHaveBeenCalledWith(params.user_id);
+    expect(executeSpy).toHaveBeenCalledWith(transaction.user_id);
   });
 
   it("should call IdGeneratorAdapter", async () => {
@@ -77,7 +68,7 @@ describe("CreateTransactionUseCase", () => {
     const executeSpy = jest.spyOn(idGeneratorAdapter, "execute");
 
     // act
-    await sut.execute(params);
+    await sut.execute(transaction);
 
     // assert
     expect(executeSpy).toHaveBeenCalled();
@@ -89,10 +80,13 @@ describe("CreateTransactionUseCase", () => {
     const executeSpy = jest.spyOn(createTransactionRepository, "execute");
 
     // act
-    await sut.execute(params);
+    await sut.execute(transaction);
 
     // assert
-    expect(executeSpy).toHaveBeenCalledWith({ ...params, id: "generated_id" });
+    expect(executeSpy).toHaveBeenCalledWith({
+      ...transaction,
+      id: "generated_id",
+    });
   });
 
   it("should throw UserNotFoundError if no user is found", async () => {
@@ -101,10 +95,12 @@ describe("CreateTransactionUseCase", () => {
     jest.spyOn(getUserById, "execute").mockResolvedValueOnce(null);
 
     // act
-    const res = sut.execute(params);
+    const res = sut.execute(transaction);
 
     // assert
-    await expect(res).rejects.toThrow(new UserNotFoundError(params.user_id));
+    await expect(res).rejects.toThrow(
+      new UserNotFoundError(transaction.user_id),
+    );
   });
 
   it("should throw if GetUserByIdRepository throws", async () => {
@@ -113,7 +109,7 @@ describe("CreateTransactionUseCase", () => {
     jest.spyOn(getUserById, "execute").mockRejectedValueOnce(new Error());
 
     // act
-    const res = sut.execute(params);
+    const res = sut.execute(transaction);
 
     // assert
     await expect(res).rejects.toThrow();
@@ -127,7 +123,7 @@ describe("CreateTransactionUseCase", () => {
       .mockRejectedValueOnce(new Error());
 
     // act
-    const res = sut.execute(params);
+    const res = sut.execute(transaction);
 
     // assert
     await expect(res).rejects.toThrow();
@@ -141,7 +137,7 @@ describe("CreateTransactionUseCase", () => {
       .mockRejectedValueOnce(new Error());
 
     // act
-    const res = sut.execute(params);
+    const res = sut.execute(transaction);
 
     // assert
     await expect(res).rejects.toThrow();

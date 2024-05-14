@@ -1,23 +1,12 @@
 import { faker } from "@faker-js/faker";
 import { UpdateTransactionUseCase } from "../index.js";
 import { TransactionType } from "@prisma/client";
+import { transaction } from "../../tests/index.js";
 
 describe("UpdateTransactionUseCase", () => {
-  const transaction = {
-    id: faker.string.uuid(),
-    user_id: faker.string.uuid(),
-    title: faker.string.alpha(10),
-    date: faker.date.anytime().toISOString(),
-    type: faker.helpers.enumValue(TransactionType),
-    amount: faker.number.float(),
-  };
-
   class UpdateTransactionRepositoryStub {
-    async execute(transactionId) {
-      return {
-        id: transactionId,
-        ...transaction,
-      };
+    async execute() {
+      return transaction;
     }
   }
 
