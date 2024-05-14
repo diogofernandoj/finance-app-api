@@ -1,16 +1,12 @@
 import { faker } from "@faker-js/faker";
 import { GetUserBalanceController } from "../index.js";
 import { UserNotFoundError } from "../../errors/user.js";
+import { userBalance } from "../../tests/index.js";
 
 describe("GetUserBalanceController", () => {
   class GetUserBalanceUseCaseStub {
     async execute() {
-      return {
-        earnings: faker.number.float(),
-        expenses: faker.number.float(),
-        investment: faker.number.float(),
-        balance: faker.number.float(),
-      };
+      return userBalance;
     }
   }
 
