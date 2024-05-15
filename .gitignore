@@ -3,5 +3,7 @@ node_modules
 .postgres-data
 .env
 
+.env.test
+
 # tests
 coverage
