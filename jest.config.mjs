@@ -9,6 +9,7 @@ const config = {
   coverageProvider: "v8",
   modulePathIgnorePatterns: [".postgres-data"],
   collectCoverageFrom: ["src/**/*.js"],
+  globalSetup: "<rootDir>/jest.global-setup.js",
 };
 
 export default config;
