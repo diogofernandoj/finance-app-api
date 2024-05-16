@@ -7,6 +7,10 @@ describe("CreateUserRepository", () => {
   it("should create a user on db", async () => {
     const res = await sut.execute(user);
 
-    expect(res).toBeTruthy();
+    expect(res.id).toBe(res.id);
+    expect(res.firstName).toBe(res.firstName);
+    expect(res.lastName).toBe(res.lastName);
+    expect(res.email).toBe(res.email);
+    expect(res.password).toBe(res.password);
   });
 });
