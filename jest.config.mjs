@@ -10,6 +10,7 @@ const config = {
   modulePathIgnorePatterns: [".postgres-data"],
   collectCoverageFrom: ["src/**/*.js"],
   globalSetup: "<rootDir>/jest.global-setup.js",
+  setupFilesAfterEnv: ["<rootDir>/jest.setup-after-env.js"],
 };
 
 export default config;
