@@ -24,4 +24,12 @@ describe("CreateUserRepository", () => {
       data: user,
     });
   });
+
+  it("should throw if Prisma throws", async () => {
+    jest.spyOn(prisma.user, "create").mockRejectedValueOnce(new Error());
+
+    const res = sut.execute(user);
+
+    await expect(res).rejects.toThrow();
+  });
 });
