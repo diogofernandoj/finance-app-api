@@ -24,4 +24,20 @@ describe("PosgtgresDeleteTransactionRepository", () => {
     expect(dayjs(res.date).month()).toBe(dayjs(transaction.date).month());
     expect(dayjs(res.date).year()).toBe(dayjs(transaction.date).year());
   });
+
+  it("should call Prisma with correct params", async () => {
+    await prisma.user.create({ data: user });
+    await prisma.transaction.create({
+      data: { ...transaction, user_id: user.id },
+    });
+    const prismaSpy = jest.spyOn(prisma.transaction, "delete");
+
+    await sut.execute(transaction.id);
+
+    expect(prismaSpy).toHaveBeenCalledWith({
+      where: {
+        id: transaction.id,
+      },
+    });
+  });
 });
