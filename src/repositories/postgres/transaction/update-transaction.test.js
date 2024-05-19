@@ -6,9 +6,8 @@ import { TransactionType } from "@prisma/client";
 import dayjs from "dayjs";
 
 describe("PostgresUpdateTransactionRepository", () => {
-  const sut = new PostgresUpdateTransactionRepository();
-
   it("should update a transaction on db", async () => {
+    const sut = new PostgresUpdateTransactionRepository();
     await prisma.user.create({ data: user });
     await prisma.transaction.create({
       data: { ...transaction, user_id: user.id },
@@ -31,5 +30,23 @@ describe("PostgresUpdateTransactionRepository", () => {
     );
     expect(dayjs(res.date).month()).toBe(dayjs(params.date).month());
     expect(dayjs(res.date).year()).toBe(dayjs(params.date).year());
+  });
+
+  it("should call Prisma with correct params", async () => {
+    const sut = new PostgresUpdateTransactionRepository();
+    await prisma.user.create({ data: user });
+    await prisma.transaction.create({
+      data: { ...transaction, user_id: user.id },
+    });
+    const prismaSpy = jest.spyOn(prisma.transaction, "update");
+
+    await sut.execute(transaction.id, { ...transaction, user_id: user.id });
+
+    expect(prismaSpy).toHaveBeenCalledWith({
+      where: {
+        id: transaction.id,
+      },
+      data: { ...transaction, user_id: user.id },
+    });
   });
 });
