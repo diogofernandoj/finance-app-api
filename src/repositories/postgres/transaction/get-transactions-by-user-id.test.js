@@ -37,4 +37,14 @@ describe("PostgresTransactionsyUserId", () => {
       },
     });
   });
+
+  it("should throw if Prisma throws", async () => {
+    jest
+      .spyOn(prisma.transaction, "findMany")
+      .mockRejectedValueOnce(new Error());
+
+    const res = sut.execute(user.id);
+
+    await expect(res).rejects.toThrow();
+  });
 });
