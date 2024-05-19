@@ -6,9 +6,7 @@ export class PostgresUpdateTransactionRepository {
       where: {
         id: transactionId,
       },
-      data: {
-        updateTransactionParams,
-      },
+      data: updateTransactionParams,
     });
   }
 }
