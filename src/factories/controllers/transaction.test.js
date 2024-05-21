@@ -1,11 +1,13 @@
 import {
   CreateTransactionController,
   DeleteTransactionController,
+  GetTransactionsByUserIdController,
   UpdateTransactionController,
 } from "../../controllers/index.js";
 import {
   makeCreateTransactionController,
   makeDeleteTransactionController,
+  makeGetTransactionsByUserIdController,
   makeUpdateTransactionController,
 } from "./transaction.js";
 
@@ -25,6 +27,12 @@ describe("Transaction Controller Factories", () => {
   it("should return a valid DeleteTransactionController instance", () => {
     expect(makeDeleteTransactionController()).toBeInstanceOf(
       DeleteTransactionController,
+    );
+  });
+
+  it("should return a valid GetTransactionsByUserIdController instance", () => {
+    expect(makeGetTransactionsByUserIdController()).toBeInstanceOf(
+      GetTransactionsByUserIdController,
     );
   });
 });
