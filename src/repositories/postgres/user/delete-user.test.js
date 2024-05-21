@@ -15,6 +15,7 @@ describe("DeleteUserRepository", () => {
   });
 
   it("should call prisma with correct params", async () => {
+    await prisma.user.create({ data: user });
     const prismaSpy = jest.spyOn(prisma.user, "delete");
 
     await sut.execute(user.id);
@@ -24,5 +25,14 @@ describe("DeleteUserRepository", () => {
         id: user.id,
       },
     });
+  });
+
+  it("should throw generic error if Prisma throws generic error", async () => {
+    const sut = new PostgresDeleteUserRepository();
+    jest.spyOn(prisma.user, "delete").mockRejectedValueOnce(new Error());
+
+    const res = sut.execute(user.id);
+
+    await expect(res).rejects.toThrow();
   });
 });
