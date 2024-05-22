@@ -4,7 +4,7 @@ import express from "express";
 import { usersRouter } from "./src/routes/user.js";
 import { transactionsRouter } from "./src/routes/transaction.js";
 
-const app = express();
+export const app = express();
 
 app.use(express.json());
 
