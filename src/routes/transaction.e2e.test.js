@@ -71,4 +71,12 @@ describe("Transaction Routes E2E Tests", () => {
     expect(res.status).toBe(200);
     expect(res.body.id).toBe(createdTransaction.id);
   });
+
+  it("PATCH /api/transactions/:transactionId should return 404 when updating a non-existing transaction", async () => {
+    const res = await request(app)
+      .patch(`/api/transactions/${transaction.id}`)
+      .send({ amount: 100, type: TransactionType.INVESTMENT });
+
+    expect(res.status).toBe(404);
+  });
 });
