@@ -53,10 +53,7 @@ jobs:
         run: npm install
 
       - name: Make envfile
-        uses: SpicyPizza/create-envfile@v2
-        with:
-          envkey_DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          file_name: .env.test
+        run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env.test
 
       - name: Run migrations
         run: npx prisma migrate deploy
