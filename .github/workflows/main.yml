@@ -53,7 +53,7 @@ jobs:
         run: npm install
 
       - name: Make envfile
-        run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env.test
+        run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
 
       - name: Run migrations
         run: npx prisma migrate deploy
