@@ -8,7 +8,9 @@
     "test:watch": "npm run test -- --watch",
     "test:coverage": "npm run test -- --coverage",
     "postinstall": "husky install && prisma generate",
-    "dev": "node --watch index.js"
+    "dev": "node --watch index.js",
+    "eslint:check": "eslint src",
+    "prettier:check": "prettier --check src"
   },
   "type": "module",
   "keywords": [],
@@ -25,6 +27,7 @@
     "husky": "^8.0.3",
     "jest": "^29.7.0",
     "lint-staged": "^14.0.1",
+    "prettier": "^3.2.5",
     "prisma": "^5.11.0",
     "supertest": "^7.0.0"
   },
