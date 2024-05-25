@@ -62,7 +62,7 @@ describe("GetTransactionsByUserId", () => {
   it("should return 404 when GetTransactionsUseCase throws UserNotFoundError", async () => {
     // arrange
     const { sut, getTransactionsByUserIdUseCase } = makeSut();
-    jest
+    import.meta.jest
       .spyOn(getTransactionsByUserIdUseCase, "execute")
       .mockRejectedValueOnce(new UserNotFoundError());
 
@@ -76,7 +76,7 @@ describe("GetTransactionsByUserId", () => {
   it("should return 500 when GetTransactionsUseCase throws", async () => {
     // arrange
     const { sut, getTransactionsByUserIdUseCase } = makeSut();
-    jest
+    import.meta.jest
       .spyOn(getTransactionsByUserIdUseCase, "execute")
       .mockRejectedValueOnce(new Error());
 
@@ -90,7 +90,10 @@ describe("GetTransactionsByUserId", () => {
   it("should call GetTransactionsByUserIdUseCase with correct params", async () => {
     // arrange
     const { sut, getTransactionsByUserIdUseCase } = makeSut();
-    const executeSpy = jest.spyOn(getTransactionsByUserIdUseCase, "execute");
+    const executeSpy = import.meta.jest.spyOn(
+      getTransactionsByUserIdUseCase,
+      "execute",
+    );
 
     // act
     await sut.execute(httpRequest);

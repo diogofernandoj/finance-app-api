@@ -30,7 +30,10 @@ describe("DeleteUserUseCase", () => {
   it("should call DeleteUserRepository with correct param", async () => {
     // arrange
     const { sut, deleteUserRepository } = makeSut();
-    const deleteUserSpy = jest.spyOn(deleteUserRepository, "execute");
+    const deleteUserSpy = import.meta.jest.spyOn(
+      deleteUserRepository,
+      "execute",
+    );
     const userId = faker.string.uuid();
 
     // act
@@ -43,7 +46,7 @@ describe("DeleteUserUseCase", () => {
   it("should throw when DeleteUserRepository throws", async () => {
     // arrange
     const { sut, deleteUserRepository } = makeSut();
-    jest
+    import.meta.jest
       .spyOn(deleteUserRepository, "execute")
       .mockRejectedValueOnce(new Error());
 

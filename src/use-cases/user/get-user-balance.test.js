@@ -41,7 +41,9 @@ describe("GetUserBalanceUseCase", () => {
   it("should throw UserNotFoundError if GetUserByIdRepository returns null", async () => {
     // arrange
     const { sut, getUserByIdRepository } = makeSut();
-    jest.spyOn(getUserByIdRepository, "execute").mockResolvedValueOnce(null);
+    import.meta.jest
+      .spyOn(getUserByIdRepository, "execute")
+      .mockResolvedValueOnce(null);
 
     // act
     const res = sut.execute(faker.string.uuid());
@@ -54,7 +56,7 @@ describe("GetUserBalanceUseCase", () => {
     // arrange
     const { sut, getUserByIdRepository } = makeSut();
     const userId = faker.string.uuid();
-    const executeSpy = jest.spyOn(getUserByIdRepository, "execute");
+    const executeSpy = import.meta.jest.spyOn(getUserByIdRepository, "execute");
 
     // act
     await sut.execute(userId);
@@ -67,7 +69,10 @@ describe("GetUserBalanceUseCase", () => {
     // arrange
     const { sut, getUserBalanceRepository } = makeSut();
     const userId = faker.string.uuid();
-    const executeSpy = jest.spyOn(getUserBalanceRepository, "execute");
+    const executeSpy = import.meta.jest.spyOn(
+      getUserBalanceRepository,
+      "execute",
+    );
 
     // act
     await sut.execute(userId);
@@ -79,7 +84,7 @@ describe("GetUserBalanceUseCase", () => {
   it("should throw if GetUserByIdRepository throws", async () => {
     // arrange
     const { sut, getUserByIdRepository } = makeSut();
-    jest
+    import.meta.jest
       .spyOn(getUserByIdRepository, "execute")
       .mockRejectedValueOnce(new Error());
 
@@ -93,7 +98,7 @@ describe("GetUserBalanceUseCase", () => {
   it("should throw if GetUserBalanceRepository throws", async () => {
     // arrange
     const { sut, getUserBalanceRepository } = makeSut();
-    jest
+    import.meta.jest
       .spyOn(getUserBalanceRepository, "execute")
       .mockRejectedValueOnce(new Error());
 

@@ -32,7 +32,7 @@ describe("PosgtgresDeleteTransactionRepository", () => {
     await prisma.transaction.create({
       data: { ...transaction, user_id: user.id },
     });
-    const prismaSpy = jest.spyOn(prisma.transaction, "delete");
+    const prismaSpy = import.meta.jest.spyOn(prisma.transaction, "delete");
 
     await sut.execute(transaction.id);
 
@@ -45,7 +45,9 @@ describe("PosgtgresDeleteTransactionRepository", () => {
 
   it("should throw generic error if Prisma throws generic error", async () => {
     const sut = new PostgresDeleteTransactionRepository();
-    jest.spyOn(prisma.transaction, "delete").mockRejectedValueOnce(new Error());
+    import.meta.jest
+      .spyOn(prisma.transaction, "delete")
+      .mockRejectedValueOnce(new Error());
 
     const res = sut.execute(transaction.id);
 
@@ -54,7 +56,7 @@ describe("PosgtgresDeleteTransactionRepository", () => {
 
   it("should throw TransactionNotFoundError if Prisma does not find a transaction", async () => {
     const sut = new PostgresDeleteTransactionRepository();
-    jest.spyOn(prisma.transaction, "delete").mockRejectedValueOnce(
+    import.meta.jest.spyOn(prisma.transaction, "delete").mockRejectedValueOnce(
       new PrismaClientKnownRequestError("", {
         code: "P2025",
       }),
